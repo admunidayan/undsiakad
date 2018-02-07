@@ -215,7 +215,7 @@ class Mahasiswa_m extends CI_Model {
 		return $query->result();
 	}
 	public function searcing_data2($sampai,$dari,$id,$string,$angkatan){
-		$this->db->select('mahasiswa.nm_pd,mahasiswa.id,mahasiswa.tgl_lahir,mahasiswa.tmpt_lahir,mahasiswa_pt.*');
+		$this->db->select('mahasiswa.id_pd,mahasiswa.nm_pd,mahasiswa.id,mahasiswa.tgl_lahir,mahasiswa.tmpt_lahir,mahasiswa_pt.*,mahasiswa.id_pd AS idpd');
 		$this->db->join('mahasiswa', 'mahasiswa.id_mhs_pt = mahasiswa_pt.id');
 		if (!empty($string)) {
 			$this->db->like('nipd',$string);

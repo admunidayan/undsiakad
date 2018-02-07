@@ -83,7 +83,7 @@
 									<?php endif ?>
 								</td>
 								<td class="tengah fkpading">
-									<?php if (!empty($data->id_pd)): ?>
+									<?php if (!empty($data->idpd)): ?>
 										<label class="label label-success">exported</label>
 									<?php else: ?>
 										<label class="label label-warning">not exported</label>

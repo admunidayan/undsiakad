@@ -132,6 +132,7 @@ class Export extends CI_Controller {
                         'kewarganegaraan' => 'ID',
                         'a_terima_kps'=>$dtmhs->a_terima_kps
                     );
+                    // echo "<pre>";print_r($mahasiswa);echo "</pre>";exit();
                     $inputmhs = $proxy->InsertRecord($token, 'mahasiswa', json_encode($mahasiswa));
                     // echo "<pre>";print_r($inputmhs);echo "</pre>";exit();
                     if ($inputmhs['result']['error_desc']==NULL) {
