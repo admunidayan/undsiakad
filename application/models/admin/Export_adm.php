@@ -232,14 +232,14 @@ class Export_adm extends CI_Model {
 	}
 	public function mahasiswa_not_exported($string,$angkatan) {
 		if (!empty($string)) {
-			$this->db->like('npm',$string);
-			$this->db->or_like('nama_mhs',$string);
+			$this->db->like('nipd',$string);
+			$this->db->or_like('nm_pd',$string);
 		}
 		if (!empty($angkatan)) {
 			$this->db->where('angkatan',$angkatan);
 		}
 		$this->db->where('mahasiswa.id_pd', NULL);
-		$this->db->join('mahasiswa_pt', 'mahasiswa_pt.id_mhs = mahasiswa.id');
+		$this->db->join('mahasiswa_pt', 'mahasiswa_pt.id = mahasiswa.id_mhs_pt');
 		$this->db->join('agama', 'agama.id_agama = mahasiswa.id_agama');
 		$this->db->join('jenis_pendaftaran', 'jenis_pendaftaran.id_jns_daftar = mahasiswa_pt.id_jns_daftar');
 		$query = $this->db->get('mahasiswa');
