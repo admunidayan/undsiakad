@@ -25,7 +25,7 @@ class Export extends CI_Controller {
                 // pagging setting
                 $data['contoh'] =$getjumlah;
                 $jumlah = $getjumlah;
-                $config['base_url'] = base_url().'index.php/admin/export/';
+                $config['base_url'] = base_url().'index.php/admin/export/index/';
                 $config['total_rows'] = $jumlah;
                 $config['per_page'] = '100';
                 $config['first_page'] = 'Awal';
@@ -135,39 +135,66 @@ class Export extends CI_Controller {
                     $inputmhs = $proxy->InsertRecord($token, 'mahasiswa', json_encode($mahasiswa));
                     // echo "<pre>";print_r($inputmhs);echo "</pre>";exit();
                     if ($inputmhs['result']['error_desc']==NULL) {
-                        $id_pds = "p.nm_pd='".strtoupper($dtmhs->nm_pd)."' and p.tgl_lahir='".date('Y-m-d', strtotime($dtmhs->tgl_lahir))."'";
+                       // $id_pds = "id_pd='".$inputmhs['result']['id_pd']."'";
+                        // $dtexp = $proxy->GetRecord($token,'mahasiswa',$id_pds);
+                        // echo "<pre>";print_r($dtexp);echo "</pre>";exit();
+                        $id_pdmhs = array('id_pd' => $inputmhs['result']['id_pd']);
+                        $this->Export_adm->update_mhs($kode,$id_pdmhs);
+                        $mhspt=array(
+                            'id_pd' => $inputmhs['result']['id_pd'],
+                            'id_sp' => $id_sp,
+                            'id_sms' => $dtmhspt->id_sms,
+                            'id_jns_daftar' => $dtmhspt->id_jns_daftar,
+                            'nipd' => $dtmhspt->nipd,
+                            'tgl_masuk_sp' => date('Y-m-d', strtotime($dtmhspt->tgl_masuk_sp)),
+                            'a_pernah_paud' => '1',
+                            'a_pernah_tk' => '1',
+                            'mulai_smt' => $dtmhspt->mulai_smt,
+                            'tgl_create' => '2017-09-07',
+                        );
+                        $inputmhspt =  $proxy->InsertRecord($token, 'mahasiswa_pt', json_encode($mhspt));
+                        // echo "<pre>";print_r($inputmhspt);echo "</pre>";exit();
+                        if ($inputmhspt['result']['error_desc']==NULL) {
+                        // $id_mhspt = "p.nipd='".$dtmhspt->nipd."'";
+                        // $restmhs = $proxy->GetRecord($token,'mahasiswa_pt',$id_mhspt);
+                            $id_reg_pd = array('id_reg_pd' => $inputmhspt['result']['id_reg_pd']);
+                        // echo "<pre>";print_r($id_reg_pd);echo "</pre>";exit();
+                            $this->Export_adm->update_mhs_pt($dtmhs->id_mhs_pt,$id_reg_pd);
+                        }
+                    }else{
+                        $id_pds = "p.nm_pd='".strtoupper($dtmhs->nm_pd)."' and p.tgl_lahir='".date('Y-m-d', strtotime($dtmhs->tgl_lahir))."' and p.nm_ibu_kandung='".$dtmhs->nm_ibu_kandung."'";
                         $dtexp = $proxy->GetRecord($token,'mahasiswa',$id_pds);
                         // echo "<pre>";print_r($dtexp);echo "</pre>";exit();
                         $id_pdmhs = array('id_pd' => $dtexp['result']['id_pd']);
                         $this->Export_adm->update_mhs($kode,$id_pdmhs);
+
+                        $mhspt=array(
+                            'id_pd' => $dtexp['result']['id_pd'],
+                            'id_sp' => $id_sp,
+                            'id_sms' => $dtmhspt->id_sms,
+                            'id_jns_daftar' => $dtmhspt->id_jns_daftar,
+                            'nipd' => $dtmhspt->nipd,
+                            'tgl_masuk_sp' => date('Y-m-d', strtotime($dtmhspt->tgl_masuk_sp)),
+                            'a_pernah_paud' => '1',
+                            'a_pernah_tk' => '1',
+                            'mulai_smt' => $dtmhspt->mulai_smt,
+                            'tgl_create' => '2017-09-07',
+                        );
+                        $inputmhspt =  $proxy->InsertRecord($token, 'mahasiswa_pt', json_encode($mhspt));
+                        if ($inputmhspt['result']['error_desc']==NULL) {
+                        // $id_mhspt = "p.nipd='".$dtmhspt->nipd."'";
+                        // $restmhs = $proxy->GetRecord($token,'mahasiswa_pt',$id_mhspt);
+                            $id_reg_pd = array('id_reg_pd' => $inputmhspt['result']['id_reg_pd']);
+                        // echo "<pre>";print_r($id_reg_pd);echo "</pre>";exit();
+                            $this->Export_adm->update_mhs_pt($dtmhs->id_mhs_pt,$id_reg_pd);
+                        }
                     }
                     // input mahasiswa_pt
-                    $id_pds = "p.nm_pd='".strtoupper($dtmhs->nm_pd)."' and p.tgl_lahir='".date('Y-m-d', strtotime($dtmhs->tgl_lahir))."' and p.nm_ibu_kandung='".$dtmhs->nm_ibu_kandung."'";
+                    // $id_pds = "p.nm_pd='".strtoupper($dtmhs->nm_pd)."' and p.tgl_lahir='".date('Y-m-d', strtotime($dtmhs->tgl_lahir))."' and p.nm_ibu_kandung='".$dtmhs->nm_ibu_kandung."'";
 
-                    $get_idpd = $proxy->GetRecord($token,'mahasiswa',$id_pds);
+                    // $get_idpd = $proxy->GetRecord($token,'mahasiswa',$id_pds);
                     // echo "<pre>";print_r($get_idpd);echo "</pre>";exit();
-                    $id_pd=$get_idpd['result']['id_pd'];
-                    $mhspt=array(
-                        'id_pd' => $id_pd,
-                        'id_sp' => $id_sp,
-                        'id_sms' => $dtmhspt->id_sms,
-                        'id_jns_daftar' => $dtmhspt->id_jns_daftar,
-                        'nipd' => $dtmhspt->nipd,
-                        'tgl_masuk_sp' => date('Y-m-d', strtotime($dtmhspt->tgl_masuk_sp)),
-                        'a_pernah_paud' => '1',
-                        'a_pernah_tk' => '1',
-                        'mulai_smt' => $dtmhspt->mulai_smt,
-                        'tgl_create' => '2017-09-07',
-                    );
-                    $inputmhspt =  $proxy->InsertRecord($token, 'mahasiswa_pt', json_encode($mhspt));
-                    // echo "<pre>";print_r($inputmhspt);echo "</pre>";exit();
-                    if ($inputmhspt['result']['error_desc']==NULL) {
-                        $id_mhspt = "p.nipd='".$dtmhspt->nipd."'";
-                        $restmhs = $proxy->GetRecord($token,'mahasiswa_pt',$id_mhspt);
-                        $id_reg_pd = array('id_reg_pd' => $restmhs['result']['id_reg_pd']);
-                        // echo "<pre>";print_r($id_reg_pd);echo "</pre>";exit();
-                        $this->Export_adm->update_mhs_pt($dtmhs->id_mhs_pt,$id_reg_pd);
-                    }
+                    // $id_pd=$get_idpd['result']['id_pd'];
                 }
                 $pesan = 'Export data berhasil';
                 $this->session->set_flashdata('message', $pesan );
