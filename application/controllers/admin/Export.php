@@ -27,7 +27,7 @@ class Export extends CI_Controller {
                 $jumlah = $getjumlah;
                 $config['base_url'] = base_url().'index.php/admin/export/';
                 $config['total_rows'] = $jumlah;
-                $config['per_page'] = '20';
+                $config['per_page'] = '100';
                 $config['first_page'] = 'Awal';
                 $config['last_page'] = 'Akhir';
                 $config['next_page'] = '&laquo;';
@@ -50,7 +50,7 @@ class Export extends CI_Controller {
                 //inisialisasi config
                 $this->pagination->initialize($config);
                 $data['nomor'] = $offset;
-                $data['hasil'] = $this->Export_adm->mahasiswa_not_exported(@$post['string'],@$post['angkatan']);
+                $data['hasil'] = $this->Export_adm->mahasiswa_not_exported($config['per_page'],$offset,@$post['string'],@$post['angkatan']);
                 $data['pagging'] = $this->pagination->create_links();
                 $this->load->view('admin/dashboard-v', $data);
             }
@@ -86,93 +86,92 @@ class Export extends CI_Controller {
                 // perulangan
                 foreach ($post as $kode) {
                     $dtmhs = $this->Export_adm->get_mhs($kode);
-                    $dtmhspt = $this->Export_adm->get_mhs_pt($kode);
+                    $dtmhspt = $this->Export_adm->get_mhs_pt($dtmhs->id_mhs_pt);
                     $mahasiswa = array(
-                        'nm_pd' => strtoupper($dtmhs->nama_mhs),
-                        'jk' => $dtmhs->gender_mhs,
-                        'jln' => $dtmhs->alamat_mhs,
+                        'nm_pd' => strtoupper($dtmhs->nm_pd),
+                        'jk' => $dtmhs->jk,
+                        'jln' => $dtmhs->jln,
                         'rt' => $dtmhs->rt,
                         'rw' => $dtmhs->rw,
                         'nm_dsn' => $dtmhs->nm_dsn,
                         'ds_kel' => $dtmhs->ds_kel,
-                        'kode_pos' => $dtmhs->kodepost_mhs,
-                        'nisn' => '',
-                        'nik' => 0,
+                        'kode_pos' => '93717',
+                        'nisn' => $dtmhs->nisn,
+                        'nik' => $dtmhs->nik,
                         'tmpt_lahir' => $dtmhs->tmpt_lahir,
-                        'tgl_lahir' => $dtmhs->tgl_lhr_mhs,
-                        'nm_ayah' => $dtmhs->nama_ot_mhs,
+                        'tgl_lahir' => date('Y-m-d', strtotime($dtmhs->tgl_lahir)),
+                        'nm_ayah' => $dtmhs->nm_ayah,
                         'tgl_lahir_ayah' => $dtmhs->tgl_lahir_ayah,
-                        'nik_ayah' => '',
+                        'nik_ayah' => $dtmhs->nik_ayah,
                         'id_jenjang_pendidikan_ayah' => $dtmhs->id_jenjang_pendidikan_ayah,
                         'id_pekerjaan_ayah' => $dtmhs->id_pekerjaan_ayah,
                         'id_penghasilan_ayah' => $dtmhs->id_penghasilan_ayah,
-                        'id_kebutuhan_khusus_ayah' => 0,
+                        'id_kebutuhan_khusus_ayah' => $dtmhs->id_kebutuhan_khusus_ayah,
                         'nm_ibu_kandung' => $dtmhs->nm_ibu_kandung,
                         'tgl_lahir_ibu' => $dtmhs->tgl_lahir_ibu,
-                        'nik_ibu' => '',
+                        'nik_ibu' => $dtmhs->nik_ibu,
                         'id_jenjang_pendidikan_ibu' => $dtmhs->id_jenjang_pendidikan_ibu,
                         'id_pekerjaan_ibu' => $dtmhs->id_pekerjaan_ibu,
                         'id_penghasilan_ibu' => $dtmhs->id_penghasilan_ibu,
-                        'id_kebutuhan_khusus_ibu' => 0,
+                        'id_kebutuhan_khusus_ibu' => $dtmhs->id_kebutuhan_khusus_ibu,
                         'nm_wali' => $dtmhs->nm_wali,
                         'tgl_lahir_wali' => $dtmhs->tgl_lahir_wali,
                         'id_jenjang_pendidikan_wali' => $dtmhs->id_jenjang_pendidikan_wali,
                         'id_pekerjaan_wali' => $dtmhs->id_pekerjaan_wali,
                         'id_penghasilan_wali' => $dtmhs->id_penghasilan_wali,
                         'id_kk' => $dtmhs->id_kk,
-                        'no_tel_rmh' => '',
-                        'no_hp' => $dtmhs->no_hp_mhs,
-                        'email' => $dtmhs->email_mhs,
+                        'no_tel_rmh' => $dtmhs->no_tel_rmh,
+                        'no_hp' => $dtmhs->no_hp,
+                        'email' => $dtmhs->email,
                         'no_kps' => $dtmhs->no_kps,
-                        'npwp' => '',
+                        'npwp' => $dtmhs->npwp,
                         'id_wil' => '200000',
                         'id_jns_tinggal' => $dtmhs->id_jns_tinggal,
                         'id_agama' => $dtmhs->id_agama,
-                        'id_alat_transport' => '',
+                        'id_alat_transport' => $dtmhs->id_alat_transport,
                         'kewarganegaraan' => 'ID',
                         'a_terima_kps'=>$dtmhs->a_terima_kps
                     );
-                     // echo "<pre>";print_r($mahasiswa);echo "</pre>";
                     $inputmhs = $proxy->InsertRecord($token, 'mahasiswa', json_encode($mahasiswa));
                     // echo "<pre>";print_r($inputmhs);echo "</pre>";exit();
                     if ($inputmhs['result']['error_desc']==NULL) {
-                        $id_pds = "p.nm_pd='".strtoupper($dtmhs->nama_mhs)."' and p.tgl_lahir='".$dtmhs->tgl_lhr_mhs."' and p.nm_ibu_kandung='".$dtmhs->nm_ibu_kandung."'";
+                        $id_pds = "p.nm_pd='".strtoupper($dtmhs->nm_pd)."' and p.tgl_lahir='".date('Y-m-d', strtotime($dtmhs->tgl_lahir))."'";
                         $dtexp = $proxy->GetRecord($token,'mahasiswa',$id_pds);
                         // echo "<pre>";print_r($dtexp);echo "</pre>";exit();
                         $id_pdmhs = array('id_pd' => $dtexp['result']['id_pd']);
-
                         $this->Export_adm->update_mhs($kode,$id_pdmhs);
-                    } 
+                    }
                     // input mahasiswa_pt
-                    $id_pds = "p.nm_pd='".strtoupper($dtmhs->nama_mhs)."' and p.tgl_lahir='".$dtmhs->tgl_lhr_mhs."' and p.nm_ibu_kandung='".$dtmhs->nm_ibu_kandung."'";
+                    $id_pds = "p.nm_pd='".strtoupper($dtmhs->nm_pd)."' and p.tgl_lahir='".date('Y-m-d', strtotime($dtmhs->tgl_lahir))."' and p.nm_ibu_kandung='".$dtmhs->nm_ibu_kandung."'";
 
                     $get_idpd = $proxy->GetRecord($token,'mahasiswa',$id_pds);
-                    echo "<pre>";print_r($get_idpd);echo "</pre>";
+                    // echo "<pre>";print_r($get_idpd);echo "</pre>";exit();
                     $id_pd=$get_idpd['result']['id_pd'];
                     $mhspt=array(
                         'id_pd' => $id_pd,
                         'id_sp' => $id_sp,
-                        'id_sms' => $this->Export_adm->get_id_sms($dtmhspt->kode_jurusan)->id_sms,
+                        'id_sms' => $dtmhspt->id_sms,
                         'id_jns_daftar' => $dtmhspt->id_jns_daftar,
-                        'nipd' => $dtmhs->npm,
-                        'tgl_masuk_sp' => $dtmhspt->tgl_masuk_sp,
+                        'nipd' => $dtmhspt->nipd,
+                        'tgl_masuk_sp' => date('Y-m-d', strtotime($dtmhspt->tgl_masuk_sp)),
                         'a_pernah_paud' => '1',
                         'a_pernah_tk' => '1',
                         'mulai_smt' => $dtmhspt->mulai_smt,
-                        'tgl_create' => '2016-04-12'
+                        'tgl_create' => '2017-09-07',
                     );
                     $inputmhspt =  $proxy->InsertRecord($token, 'mahasiswa_pt', json_encode($mhspt));
+                    // echo "<pre>";print_r($inputmhspt);echo "</pre>";exit();
                     if ($inputmhspt['result']['error_desc']==NULL) {
-                        $id_mhspt = "p.nipd='".$dtmhs->npm."'";
+                        $id_mhspt = "p.nipd='".$dtmhspt->nipd."'";
                         $restmhs = $proxy->GetRecord($token,'mahasiswa_pt',$id_mhspt);
                         $id_reg_pd = array('id_reg_pd' => $restmhs['result']['id_reg_pd']);
                         // echo "<pre>";print_r($id_reg_pd);echo "</pre>";exit();
-                        $this->Export_adm->update_mhs_pt($kode,$id_reg_pd);
+                        $this->Export_adm->update_mhs_pt($dtmhs->id_mhs_pt,$id_reg_pd);
                     }
-                    $pesan = 'Export data berhasil';
-                    $this->session->set_flashdata('message', $pesan );
-                    redirect(base_url('index.php/admin/export'));
                 }
+                $pesan = 'Export data berhasil';
+                $this->session->set_flashdata('message', $pesan );
+                redirect(base_url('index.php/admin/export'));
             }
         }else{
             $pesan = 'Login terlebih dahulu';

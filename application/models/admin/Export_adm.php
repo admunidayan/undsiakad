@@ -230,7 +230,8 @@ class Export_adm extends CI_Model {
 		$this->db->where('id_pd', NULL);
 		return $this->db->get('mahasiswa')->num_rows();
 	}
-	public function mahasiswa_not_exported($string,$angkatan) {
+	public function mahasiswa_not_exported($sampai,$dari,$string,$angkatan) {
+		$this->db->select('mahasiswa.*,mahasiswa_pt.*,agama.*,jenis_pendaftaran.*, mahasiswa.id AS idmhs');
 		if (!empty($string)) {
 			$this->db->like('nipd',$string);
 			$this->db->or_like('nm_pd',$string);
@@ -242,7 +243,7 @@ class Export_adm extends CI_Model {
 		$this->db->join('mahasiswa_pt', 'mahasiswa_pt.id = mahasiswa.id_mhs_pt');
 		$this->db->join('agama', 'agama.id_agama = mahasiswa.id_agama');
 		$this->db->join('jenis_pendaftaran', 'jenis_pendaftaran.id_jns_daftar = mahasiswa_pt.id_jns_daftar');
-		$query = $this->db->get('mahasiswa');
+		$query = $this->db->get('mahasiswa',$sampai,$dari);
 		return $query->result();
 	}
 	public function kur_not_exported($sampai,$dari,$string) {
@@ -265,17 +266,17 @@ class Export_adm extends CI_Model {
 		return $this->db->get('kurikulum')->num_rows();
 	}
 	public function get_mhs($kode){
-		$this->db->where('id_mhs', $kode);
+		$this->db->where('id', $kode);
 		$query = $this->db->get('mahasiswa');
 		return $query->row();
 	}
 	public function get_mhs_pt($kode){
-		$this->db->where('id_mhs', $kode);
-		$query = $this->db->get('mhs_pt');
+		$this->db->where('id', $kode);
+		$query = $this->db->get('mahasiswa_pt');
 		return $query->row();
 	}
 	function update_mhs($kode,$data){
-		$this->db->where('id_mhs', $kode);
+		$this->db->where('id', $kode);
 		$this->db->update('mahasiswa', $data);
 	}
 	public function get_id_sms($kode){
@@ -314,8 +315,8 @@ class Export_adm extends CI_Model {
 		$this->db->update('kelas_kuliah', $data);
 	}
 	function update_mhs_pt($kode,$data){
-		$this->db->where('id_mhs', $kode);
-		$this->db->update('mhs_pt', $data);
+		$this->db->where('id', $kode);
+		$this->db->update('mahasiswa_pt', $data);
 	}
 	function delete_mhs($kode){
 		$this->db->where('id_mhs', $kode);
@@ -323,6 +324,6 @@ class Export_adm extends CI_Model {
 	}
 	function delete_mhs_pt($kode){
 		$this->db->where('id_mhs', $kode);
-		$this->db->delete('mhs_pt');
+		$this->db->delete('mahasiswa_pt');
 	}
 }

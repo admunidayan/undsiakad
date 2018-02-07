@@ -58,7 +58,7 @@
 								<?php $no=$nomor+1; ?>
 								<?php foreach ($hasil as $data): ?>
 									<tr>
-										<td class="tengah fkpading"><input type="checkbox" class="pilih" name="pilih[]" value="<?php echo $data->id; ?>"></td>
+										<td class="tengah fkpading"><input type="checkbox" class="pilih" name="pilih[]" value="<?php echo $data->idmhs; ?>"></td>
 										<td class="tengah fkpading"><?php echo $no; ?></td>
 										<td class="tengah fkpading"><?php echo $data->nipd; ?></td>
 										<td class="fkpading"><?php echo strtoupper($data->nm_pd); ?></td>
@@ -77,6 +77,7 @@
 							<?php endif ?>
 						</tbody>
 					</table>
+					<div><?php echo $pagging; ?></div>
 					<button id="aexportmhs" type="submit" name="submit" value="submit" class="btn btn-success tengah bts-ats2"><i class="fa fa-plus"></i> Export Data Dipilih Ke Feeder</button>
 				</form>
 
