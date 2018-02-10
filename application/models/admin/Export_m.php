@@ -88,6 +88,11 @@ class Export_m extends CI_Model {
 		$query = $this->db->get('mahasiswa_pt');
 		return $query->row();
 	}
+	public function getkls($id){
+		$this->db->where('id',$id);
+		$query = $this->db->get('kelas_kuliah');
+		return $query->row();
+	}
 	function insert_mhs_kls($data){
 		$this->db->insert('nilai', $data);
 	}

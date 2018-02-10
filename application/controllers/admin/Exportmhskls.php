@@ -117,15 +117,27 @@ class Exportmhskls extends CI_Controller {
                 }else{
                   $reg_pd = NULL;
                 }
-                $data = array(
-                'id_kls_siakad' => $post['id_kls_siakad'],
-                'id_smt' => $post['id_smt'],
-                'id_mhs_pt' => $mhs->id,
-                'id_reg_pd' => $reg_pd,
-                'id_kls' => $post['id_kls'],
-                'nipd' => filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH),
-                'kode_mk' => strtoupper(trim($post['kode_mk'])),
-              );
+                $idkls = $this->Export_m->getkls($post['id_kelas_siakad']);
+                if ($idkls->id_kls == TRUE) {
+                  $data = array(
+                    'id_kls_siakad' => $post['id_kls_siakad'],
+                    'id_smt' => $post['id_smt'],
+                    'id_mhs_pt' => $mhs->id,
+                    'id_reg_pd' => $reg_pd,
+                    'id_kls' => $idkls->id_kls,
+                    'nipd' => filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH),
+                    'kode_mk' => strtoupper(trim($post['kode_mk'])),
+                  );
+                }else{
+                  $data = array(
+                    'id_kls_siakad' => $post['id_kls_siakad'],
+                    'id_smt' => $post['id_smt'],
+                    'id_mhs_pt' => $mhs->id,
+                    'id_reg_pd' => $reg_pd,
+                    'nipd' => filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH),
+                    'kode_mk' => strtoupper(trim($post['kode_mk'])),
+                  );
+                }
                 // echo "<pre>";print_r($data);echo "</pre>";exit();
               $this->Export_m->insert_mhs_kls($data);
               }

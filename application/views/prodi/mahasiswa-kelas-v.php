@@ -245,7 +245,7 @@
 					<?php if ($nmkls->id_kls !== NULL): ?>
 						<input type="hidden" name="id_kls" value="<?php echo $nmkls->id_kls; ?>">
 					<?php else: ?>
-						<input type="hidden" name="id_kls" value="<?php echo NULL;?>">
+						<input type="hidden" name="id_kls" value="">
 					<?php endif ?>
 					<input type="hidden" name="id_smt" value="<?php echo $nmkls->id_smt; ?>">
 					<input type="hidden" name="kode_mk" value="<?php echo $nmkls->kode_mk; ?>">
