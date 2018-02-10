@@ -117,7 +117,7 @@ class Exportmhskls extends CI_Controller {
                 }else{
                   $reg_pd = NULL;
                 }
-                $idkls = $this->Export_m->getkls($post['id_kelas_siakad']);
+                $idkls = $this->Export_m->getkls($post['id_kls_siakad']);
                 if ($idkls->id_kls == TRUE) {
                   $data = array(
                     'id_kls_siakad' => $post['id_kls_siakad'],
