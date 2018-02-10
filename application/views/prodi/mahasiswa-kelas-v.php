@@ -220,7 +220,7 @@
 									<td class="fktblpad tengah">
 										<?php echo $data->nilai_indeks; ?>
 									</td>
-									<td class="tengah fkpading"><a href="<?php echo base_url('index.php/prodi/kelas/delete_mhs_kelas/'.$nmkls->id_kls.'/'.$data->id_mhs_pt); ?>"  onclick="javascript: return confirm('Yakin menghapus Mahasiswa ini ?')" class="btn label label-danger"><i class="fa fa-trash"></i> Hapus</a></td>
+									<td class="tengah fkpading"><a href="<?php echo base_url('index.php/prodi/kelas/delete_mhs_kelas/'.$nmkls->id_kelas.'/'.$data->id_mhs_pt); ?>"  onclick="javascript: return confirm('Yakin menghapus Mahasiswa ini ?')" class="btn label label-danger"><i class="fa fa-trash"></i> Hapus</a></td>
 								</tr>
 								<?php $no++ ?>
 							<?php endforeach ?>
@@ -243,9 +243,9 @@
 				<h4 class="tengah nobold"><i class="fa fa-plus u20 txtbiru"></i> Upload Data Excel</h4>
 				<form action="<?php echo base_url('index.php/admin/exportmhskls/proses_input_kelas_mhs'); ?>" method="post" enctype="multipart/form-data">
 					<?php if ($nmkls->id_kls !== NULL): ?>
-						<input type="hidden" name="id_kls_siakad" value="<?php echo $nmkls->id_kls; ?>">
+						<input type="hidden" name="id_kls" value="<?php echo $nmkls->id_kls; ?>">
 					<?php else: ?>
-						<input type="hidden" name="id_kls_siakad" value="<?php echo NULL;?>">
+						<input type="hidden" name="id_kls" value="<?php echo NULL;?>">
 					<?php endif ?>
 					<input type="hidden" name="id_smt" value="<?php echo $nmkls->id_smt; ?>">
 					<input type="hidden" name="kode_mk" value="<?php echo $nmkls->kode_mk; ?>">

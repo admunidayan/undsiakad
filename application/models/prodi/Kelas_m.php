@@ -286,8 +286,8 @@ class Kelas_m extends CI_Model
 		$this->db->update('khs',$data);
 	}
 	public function delete_khs($id){
-		$this->db->where('id_khs',$id);
-		$this->db->delete('khs');
+		$this->db->where('id',$id);
+		$this->db->delete('nilai');
 	}
 	function insert_ajar_dosen($data){
 		$this->db->insert('atur_dosen', $data);
