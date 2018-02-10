@@ -77,19 +77,18 @@ class Export_m extends CI_Model {
 		$this->db->insert('kelas_kuliah', $data);
 	}
 	//Mahasiswa kelas
-	public function cekmhskls($id,$ta,$kls){
+	public function cekmhskls($id,$kls){
 		$this->db->where('nipd',$id);
-		$this->db->where('id_tahun_ajaran',$ta);
-		$this->db->where('id_kls',$kls);
-		$query = $this->db->get('khs');
+		$this->db->where('id_kls_siakad',$kls);
+		$query = $this->db->get('nilai');
 		return $query->row();
 	}
 	public function getmhs($id){
-		$this->db->where('npm',$id);
-		$query = $this->db->get('mahasiswa');
+		$this->db->where('nipd',$id);
+		$query = $this->db->get('mahasiswa_pt');
 		return $query->row();
 	}
 	function insert_mhs_kls($data){
-		$this->db->insert('khs', $data);
+		$this->db->insert('nilai', $data);
 	}
 }

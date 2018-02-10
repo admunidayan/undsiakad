@@ -158,6 +158,11 @@
 						<div class="alert alert-success"><b><?php echo ucwords($this->session->flashdata('message2'));?></b></div>
 					</div>
 				<?php endif ?>
+				<?php if ($this->session->flashdata('export')): ?>
+					<div class="bts-ats">
+						<div class="alert alert-success"><b><?php echo ucwords($this->session->flashdata('export'));?></b></div>
+					</div>
+				<?php endif ?>
 				<h4><b>Daftar Mahasiswa Kelas</b></h4>
 				<div class="">
 					<div class="dropdown">
@@ -237,11 +242,14 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="tengah nobold"><i class="fa fa-plus u20 txtbiru"></i> Upload Data Excel</h4>
 				<form action="<?php echo base_url('index.php/admin/exportmhskls/proses_input_kelas_mhs'); ?>" method="post" enctype="multipart/form-data">
+					<?php if ($nmkls->id_kls !== NULL): ?>
+						<input type="hidden" name="id_kls_siakad" value="<?php echo $nmkls->id_kls; ?>">
+					<?php else: ?>
+						<input type="hidden" name="id_kls_siakad" value="<?php echo NULL;?>">
+					<?php endif ?>
 					<input type="hidden" name="id_smt" value="<?php echo $nmkls->id_smt; ?>">
 					<input type="hidden" name="kode_mk" value="<?php echo $nmkls->kode_mk; ?>">
-					<input type="hidden" name="id_mk" value="$nmkls->id_mk; ?>">
-					<input type="hidden" name="id_kls_fdr" value="<?php echo $nmkls->id_kls; ?>">
-					<input type="hidden" name="id_kls" value="<?php echo $nmkls->id_kls; ?>">
+					<input type="hidden" name="id_kls_siakad" value="<?php echo $nmkls->id_kelas; ?>">
 					<div class="form-group">
 						<label>Masukan File Exel</label>
 						<input type="file" name="semester" class="form-control" placeholder="File.exl">

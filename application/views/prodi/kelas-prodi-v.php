@@ -88,7 +88,7 @@
 										<label class="label label-warning">not exported</label>
 									<?php endif ?>
 								</td>
-								<td class="tengah fktblpad"><a href="<?php echo base_url('index.php/prodi/kelas/delete_kelas/'.$detkel->id_sms.'/'.$data->id_kls); ?>" onclick="javascript: return confirm('Yakin menghapus Kelas ini ?')"><label class="btn label label-danger"><i class="fa fa-trash"></i> Hapus</label></a></td>
+								<td class="tengah fktblpad"><a href="<?php echo base_url('index.php/prodi/kelas/delete_kelas/'.$detkel->kode_prodi.'/'.$data->id_kelas); ?>" onclick="javascript: return confirm('Yakin menghapus Kelas ini ?')"><label class="btn label label-danger"><i class="fa fa-trash"></i> Hapus</label></a></td>
 							</tr>
 							<?php  $no++ ?>
 						<?php endforeach ?>

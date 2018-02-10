@@ -31,24 +31,26 @@ class Exportmhskls extends CI_Controller {
       foreach ($data as $key => $val) {
         if ($key>0) {
           if ($val[0]!='') {
-            $check = $this->Export_m->cekmhskls(filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH),$post['id_kls']);
+            $check = $this->Export_m->cekmhskls(filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH),$post['id_kls_siakad']);
             if ($check==true) {
               $error_count++;
               $error[] = $val[0]." ".$val[1]." Sudah Ada";
             } else  {
               $sukses++;
               $mhs = $this->Export_m->getmhs(filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH));
-              $mk = $this->Export_m->getmk($post['kode_mk']);
+              if ($mhs->id_reg_pd == TRUE) {
+                $reg_pd = $mhs->id_reg_pd;
+              }else{
+                $reg_pd = NULL;
+              }
               $data = array(
-                'id_tahun_ajaran' => $post['id_smt'],
-                'id_semester' => $post['id_smt'],
-                'id_mhs' => $mhs->id_mhs,
-                'id_matakuliah' => $mk->id_matakuliah,
-                'id_kls_fdr' => $post['id_kls_fdr'],
+                'id_kelas_siakad' => $post['id_kelas_siakad'],
+                'id_smt' => $post['id_smt'],
+                'id_mhs_pt' => $mhs->id,
+                'id_reg_pd' => $reg_pd,
                 'id_kls' => $post['id_kls'],
                 'nipd' => filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH),
                 'kode_mk' => $post['kode_mk'],
-                't_ulang' => $post['t_ulang']
               );
               $this->Export_m->insert_mhs_kls($data);
             }
@@ -76,10 +78,11 @@ class Exportmhskls extends CI_Controller {
       </div>";
       }
       $this->session->set_flashdata('export', $msg);
-      redirect(base_url('index.php/prodi/kelas/kelasprodi/'.$post['id_prodi']));
+      redirect(base_url('index.php/prodi/kelas/mhskelas/'.$post['id_kls_siakad']));
   }
   function proses_input_kelas_mhs(){
     $post = $this->input->post();
+    // echo "<pre>";print_r($post);echo "<pre/>";exit();
     if (!is_dir('asset/upload/mahasiswa')) {
         mkdir('asset/upload/mahasiswa');
       }
@@ -101,30 +104,28 @@ class Exportmhskls extends CI_Controller {
       foreach ($data as $key => $val) {
         if ($key>0) {
           if ($val[0]!='') {
-            if (!empty($this->Export_m->getmhs(filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH)))) {
-              $check = $this->Export_m->cekmhskls(filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH),$post['id_smt'],$post['id_kls']);
+            $mhs = $this->Export_m->getmhs(filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH));
+            if (!empty($mhs)) {
+              $check = $this->Export_m->cekmhskls(filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH),$post['id_kls_siakad']);
               if ($check==true) {
                 $error_count++;
                 $error[] = $val[0]." ".$val[1]." Sudah Ada";
               } else  {
                 $sukses++;
-                if ( substr($post['id_smt'],-1)==1) {
-                  $tulang='ganjil';
+                if ($mhs->id_reg_pd == TRUE) {
+                  $reg_pd = $mhs->id_reg_pd;
                 }else{
-                  $tulang='genap';
+                  $reg_pd = NULL;
                 }
-                $mhs = $this->Export_m->getmhs(filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH));
                 $data = array(
-                  'id_tahun_ajaran'      => $post['id_smt'],
-                  'id_semester'      => $post['id_smt'],
-                  'id_mhs'      => $mhs->id_mhs,
-                  'id_matakuliah' => $post['id_mk'],
-                  'id_kls_fdr' => $post['id_kls_fdr'],
-                  'id_kls' => $post['id_kls'],
-                  'nipd' => filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH),
-                  'kode_mk' => $post['kode_mk'],
-                  't_ulang' => $tulang
-                  );
+                'id_kls_siakad' => $post['id_kls_siakad'],
+                'id_smt' => $post['id_smt'],
+                'id_mhs_pt' => $mhs->id,
+                'id_reg_pd' => $reg_pd,
+                'id_kls' => $post['id_kls'],
+                'nipd' => filter_var($val[0], FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH),
+                'kode_mk' => strtoupper(trim($post['kode_mk'])),
+              );
                 // echo "<pre>";print_r($data);echo "</pre>";exit();
               $this->Export_m->insert_mhs_kls($data);
               }
@@ -156,7 +157,7 @@ class Exportmhskls extends CI_Controller {
       </div>";
       }
       $this->session->set_flashdata('export', $msg);
-      redirect(base_url('index.php/prodi/kelas/mhskelas/'.$post['id_kls']));
+      redirect(base_url('index.php/prodi/kelas/mhskelas/'.$post['id_kls_siakad']));
   }
 }
 ?>

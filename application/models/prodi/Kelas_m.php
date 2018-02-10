@@ -176,7 +176,7 @@ class Kelas_m extends CI_Model
 		$this->db->insert('kelas_kuliah', $data);
 	}
 	function delete_kelas($id){
-		$this->db->where('id_kelas_kuliah', $id);
+		$this->db->where('id',$id);
 		$this->db->delete('kelas_kuliah');
 	}
 	// tampildosen
