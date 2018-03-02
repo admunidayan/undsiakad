@@ -283,17 +283,18 @@ class Export extends CI_Controller {
                 // perulangan
                 foreach ($post as $kode) {
                     $dtmhs = $this->Export_adm->get_kls($kode);
-                    $sms_id = $this->Export_adm->get_prodi($dtmhs->kode_jurusan)->id_sms;
-                    $mk = $this->Export_adm->get_mk($dtmhs->kode_mk)->id_mk;
+                    $sms_id = trim($dtmhs->id_sms);
+                    $mk = trim($dtmhs->id_mk);
                     $kelas = array(
-                        'id_sms' => $sms_id,
-                        'id_smt' => $dtmhs->semester,
-                        'nm_kls' => $dtmhs->nama_kelas,
-                        'sks_mk' => $dtmhs->sks_mk,
-                        'sks_tm' => $dtmhs->sks_tm,
-                        'sks_prak' => $dtmhs->sks_prak,
-                        'sks_prak_lap' => $dtmhs->sks_prak_lap,
-                        'sks_sim' => $dtmhs->sks_sim,
+                        'id_sms' => trim($sms_id),
+                        'id_smt' => trim($dtmhs->id_smt),
+                        'nm_kls' => $dtmhs->nm_kls,
+                        'sks_mk' => trim($dtmhs->sks_mk),
+                        'sks_tm' => trim($dtmhs->sks_tm),
+                        'sks_prak' => trim($dtmhs->sks_prak),
+                        'sks_prak_lap' => trim($dtmhs->sks_prak_lap),
+                        'sks_sim' => trim($dtmhs->sks_sim),
+                        'bahasan_case' => trim($dtmhs->bahasan_case),
                         'a_selenggara_pditt' => 0,
                         'a_pengguna_pditt' => 0,
                         'kuota_pditt' => 0,
@@ -301,19 +302,58 @@ class Export extends CI_Controller {
                         'tgl_selesai_koas' => '',
                         'id_mou' => '',
                         'id_mk' => $mk,
+                        'id_kls_pditt' => trim($dtmhs->id_kls_pditt)
                     );
-                    $inputmhs = $proxy->InsertRecord($token, 'kelas_kuliah', json_encode($kelas));
-                    
+                    // echo "<pre>";print_r($kelas);echo "</pre>";exit();
+                    $inputmhs = $proxy->InsertRecord($token,'kelas_kuliah',json_encode($kelas));
+                    // echo "<pre>";print_r($inputmhs);echo "</pre>";exit();
                     if ($inputmhs['result']['error_desc']==NULL) {
-                        $id_pds = "p.id_sms='".$sms_id."' and p.id_mk='".$mk."' and p.id_smt='".$dtmhs->semester."'";
-                        $dtexp = $proxy->GetRecord($token,'kelas_kuliah',$id_pds);
-                        $id_pdmhs = array('id_kls' => $dtexp['result']['id_kls']);
+                        $id_pdmhs = array('id_kls' => $inputmhs['result']['id_kls']);
                         $this->Export_adm->update_kls($kode,$id_pdmhs);
-                    } 
+
+                        $dtdsnajar = $this->Export_adm->get_dsn_ajar($kode);
+                        if ($dtdsnajar == TRUE) {
+                            foreach ($dtdsnajar as $dtdsn) {
+                                $idklsdsn = array('id_kls' => $inputmhs['result']['id_kls']);
+                                $this->Export_adm->update_kls_dsn($dtdsn->id,$idklsdsn);
+                                $dosen = array(
+                                    'id_subst' => trim($dtdsn->id_subst),
+                                    'id_jns_eval' => trim($dtdsn->id_jns_eval),
+                                    'id_reg_ptk' => trim($dtdsn->id_reg_ptk),
+                                    'id_kls' => trim($inputmhs['result']['id_kls']),
+                                    'sks_subst_tot' => trim($dtdsn->sks_subst_tot),
+                                    'sks_tm_subst' => trim($dtdsn->sks_tm_subst),
+                                    'sks_prak_subst' => trim($dtdsn->sks_prak_subst),
+                                    'sks_prak_lap_subst' => trim($dtdsn->sks_prak_lap_subst),
+                                    'sks_sim_subst' => trim($dtdsn->sks_sim_subst),
+                                    'jml_tm_renc' => trim($dtdsn->jml_tm_renc),
+                                    'jml_tm_real' => trim($dtdsn->jml_tm_real)
+                                );
+                            // echo "<pre>";print_r($kelas);echo "</pre>";exit();
+                                $inptdnskls = $proxy->InsertRecord($token,'ajar_dosen',json_encode($dosen));
+                            }
+                        }
+                        $mhskelas = $this->Export_adm->get_mhs_kls($kode);
+                        if ($mhskelas == TRUE) {
+                            foreach ($mhskelas as $mhs) {
+                                $idmhskls = array('id_kls' => $inputmhs['result']['id_kls']);
+                                $this->Export_adm->update_mhs_kls($mhs->id,$idmhskls);
+                                $mhsk = array(
+                                    'id_kls' => trim($inputmhs['result']['id_kls']),
+                                    'id_reg_pd' => trim($mhs->id_reg_pd),
+                                    'nilai_angka' => trim($mhs->nilai_angka),
+                                    'nilai_huruf' => trim($mhs->nilai_huruf),
+                                    'nilai_indeks' => trim($mhs->nilai_indeks)
+                                );
+                            // echo "<pre>";print_r($kelas);echo "</pre>";exit();
+                                $inputmhskls = $proxy->InsertRecord($token,'nilai',json_encode($mhsk));
+                            }
+                        }
+                    }
                 }
-                $pesan = 'Login terlebih dahulu';
-                $this->session->set_flashdata('message', $pesan );
-                redirect(base_url('index.php/login'));
+                $pesan = 'Data berhasil di Export ke feeder';
+            $this->session->set_flashdata('message', $pesan );
+            redirect(base_url('index.php/admin/export/kelas_kuliah'));
             }
         }else{
             $pesan = 'Data berhasil di Export ke feeder';

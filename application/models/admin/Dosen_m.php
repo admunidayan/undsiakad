@@ -188,15 +188,15 @@ class Dosen_m extends CI_Model
 	// baru
 	function jumlah_data_dosen($string){
 		if (!empty($string)) {
-			$this->db->like('npp',$string);
-			$this->db->or_like('nama_dosen',$string);
+			$this->db->like('nidn',$string);
+			$this->db->or_like('nm_sdm',$string);
 		}
 		return $this->db->get('dosen')->num_rows();
 	}
 	public function searcing_data($sampai,$dari,$dosen){
 		if (!empty($dosen)) {
-			$this->db->like('npp',$dosen);
-			$this->db->or_like('nama_dosen',$dosen);
+			$this->db->like('nidn',$dosen);
+			$this->db->or_like('nm_sdm',$dosen);
 		}
 		$query = $this->db->get('dosen',$sampai,$dari);
 		return $query->result();
@@ -211,7 +211,7 @@ class Dosen_m extends CI_Model
 	}
 	public function searcing_kls_dsn($sampai,$dari,$id,$dosen){
 		if (!empty($dosen)) {
-			$this->db->like('npp',$dosen);
+			$this->db->like('nidn',$dosen);
 			$this->db->or_like('atur',$dosen);
 		}
 		$this->db->where('id_dosen', $id);

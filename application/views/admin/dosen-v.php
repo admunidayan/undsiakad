@@ -45,7 +45,6 @@
 							<th rowspan="2" class="tengah fkpading">NO</th>
 							<th rowspan="2" class="tengah fkpading">NPP</th>
 							<th rowspan="2" class="tengah fkpading">DOSEN</th>
-							<th rowspan="2" class="tengah fkpading">USERNAME</th>
 							<th rowspan="2" class="tengah fkpading">L/P</th>
 							<th colspan="2" class="tengah fkpading">TTL</th>
 							<th rowspan="2" class="tengah fkpading">AGAMA</th>
@@ -60,21 +59,15 @@
 						<?php foreach ($alldosen as $data): ?>
 							<tr>
 								<td class="tengah fkpading"><?php echo $no; ?></td>
-								<td class="tengah fkpading"><?php echo $data->npp; ?></td>
+								<td class="tengah fkpading"><?php echo $data->nidn; ?></td>
 								<td class="fkpading">
-									<a href="<?php echo base_url('index.php/admin/dosen/detail/'.$data->id_dosen); ?>"><?php echo ucwords(strtolower($data->nama_dosen)); ?></a>
+									<a href="<?php echo base_url('index.php/admin/dosen/detail/'.$data->id); ?>"><?php echo ucwords(strtolower($data->nm_sdm)); ?></a>
 								</td>
-								<td class="tengah fkpading"><?php echo $data->username; ?></td>
-								<td class="tengah fkpading"><?php echo $data->gender_dosen; ?></td>
-								<td class="fkpading"><?php echo $data->tgl_lhr_dosen; ?></td>
-								<td class="fkpading"><?php echo ucwords(strtolower($data->tempat_lahir)); ?></td>
-								<td class="fkpading"><?php echo $data->agama_dosen; ?></td>
+								<td class="tengah fkpading"><?php echo $data->jk; ?></td>
+								<td class="fkpading"><?php echo $data->tgl_lahir; ?></td>
+								<td class="fkpading"><?php echo ucwords(strtolower($data->tmpt_lahir)); ?></td>
+								<td class="fkpading"><?php echo $data->id_agama; ?></td>
 								<td class="tengah fkpading">
-									<?php if ($data->status_dosen == 'Aktif'): ?>
-										<label class="label label-success"><?php echo $data->status_dosen; ?></label>
-									<?php else: ?>
-										<label class="label label-warning"><?php echo $data->status_dosen; ?></label>
-									<?php endif ?>
 								</td>
 							</tr>
 							<?php $no++ ?>

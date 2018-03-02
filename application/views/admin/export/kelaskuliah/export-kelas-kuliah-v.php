@@ -39,12 +39,12 @@
 								<?php $no = $nomor+1; ?>
 								<?php foreach ($hasil as $data): ?>
 									<tr>
-										<td class="tengah fkpading"><input type="checkbox" class="pilih" name="pilih[]" value="<?php echo $data->id_kelas_kuliah; ?>"></td>
+										<td class="tengah fkpading"><input type="checkbox" class="pilih" name="pilih[]" value="<?php echo $data->idkelas; ?>"></td>
 										<td class="tengah fkpading"><?php echo $no;?></td>
-										<td class="tengah fkpading"><?php echo $data->kode_mk;?></td>
-										<td class="fkpading"><?php echo ucwords(strtolower($data->nama_mk));?></td>
-										<td class="tengah fkpading"><?php echo $data->nama_kelas;?></td>
-										<td class="tengah fkpading"><?php echo $data->semester;?></td>
+										<td class="tengah fkpading"><?php echo $data->id_mk_siakad;?></td>
+										<td class="fkpading"><?php echo ucwords(strtolower($data->nm_mk));?></td>
+										<td class="tengah fkpading"><?php echo $data->nm_kls;?></td>
+										<td class="tengah fkpading"><?php echo $data->id_smt;?></td>
 										<td class="tengah fkpading"><?php echo $data->sks_mk;?></td>
 										<td class="tengah fkpading"><?php echo $data->sks_tm;?></td>
 										<td class="tengah fkpading"><?php echo $data->sks_prak;?></td>

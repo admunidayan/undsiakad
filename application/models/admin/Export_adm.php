@@ -291,18 +291,40 @@ class Export_adm extends CI_Model {
 		return $this->db->get('kelas_kuliah')->num_rows();
 	}
 	public function kelas_not_exported($sampai,$dari) {
+		$this->db->select('kelas_kuliah.*,mata_kuliah.id,mata_kuliah.nm_mk,kelas_kuliah.id AS idkelas');
 		$this->db->where('id_kls', NULL);
+		$this->db->join('mata_kuliah', 'mata_kuliah.id = kelas_kuliah.id_mk_siakad');
 		$query = $this->db->get('kelas_kuliah',$sampai,$dari);
 		return $query->result();
 	}
 	public function get_kls($kode){
-		$this->db->where('id_kelas_kuliah', $kode);
+		$this->db->where('id', $kode);
 		$query = $this->db->get('kelas_kuliah');
+		return $query->row();
+	}
+	public function get_dsn_ajar($kode){
+		$this->db->where('id_kls_siakad', $kode);
+		$query = $this->db->get('ajar_dosen');
+		return $query->result();
+	}
+	public function get_mhs_kls($kode){
+		$this->db->where('id_kls_siakad', $kode);
+		$query = $this->db->get('nilai');
+		return $query->result();
+	}
+	public function get_data($table,$field,$kode){
+		$this->db->where($field, $kode);
+		$query = $this->db->get($table);
 		return $query->row();
 	}
 	public function get_prodi($kode){
 		$this->db->where('kode_prodi', $kode);
 		$query = $this->db->get('prodi');
+		return $query->row();
+	}
+	public function get_sms($kode){
+		$this->db->where('id_sms', $kode);
+		$query = $this->db->get('sms');
 		return $query->row();
 	}
 	public function get_mk($kode){
@@ -311,8 +333,16 @@ class Export_adm extends CI_Model {
 		return $query->row();
 	}
 	function update_kls($kode,$data){
-		$this->db->where('id_kelas_kuliah', $kode);
+		$this->db->where('id', $kode);
 		$this->db->update('kelas_kuliah', $data);
+	}
+	function update_kls_dsn($kode,$data){
+		$this->db->where('id', $kode);
+		$this->db->update('ajar_dosen', $data);
+	}
+	function update_mhs_kls($kode,$data){
+		$this->db->where('id',$kode);
+		$this->db->update('nilai',$data);
 	}
 	function update_mhs_pt($kode,$data){
 		$this->db->where('id', $kode);
