@@ -7,6 +7,11 @@ class Isi_m extends CI_Model {
 		$query = $this->db->get('sms');
 		return $query->row();
 	}
+	public function detail_data_order($table,$field,$id){
+		$this->db->where($field,$id);
+		$query = $this->db->get($table);
+		return $query->row();
+	}
 	public function ceknilai($nipd,$smt,$mk){
 		$this->db->where('nipd',$nipd);
 		$this->db->where('id_smt',$smt);

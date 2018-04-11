@@ -12,6 +12,9 @@
 						<div class="txtabu">Import Mahasiswa dari Web Service Feeder</div>
 					</div>
 					<div class="media-right media-middle">
+						<button class="btn btn-primary tengah" data-toggle="modal" data-target="#modalimpmhs"><i class="fa fa-plus"></i> Import Mahasiswa</button>
+					</div>
+					<div class="media-right media-middle">
 						<button class="btn btn-success tengah" data-toggle="modal" data-target="#modalnilai"><i class="fa fa-plus"></i> Import Nilai</button>
 					</div>
 					<div class="media-right media-middle">
@@ -182,6 +185,31 @@
     </div>
   </div>
 </div>
+<!-- Modal import aktivitas -->
+<div class="modal fade" id="modalimpmhs" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title tengah">Import Data Mahasiswa</h4>
+      </div>
+      <div class="modal-body">
+      	<div style="margin-right: auto; margin-left: auto; padding: 28px 0px; width: 100px;" class="img-circle bghijau tengah txtputih">
+      		<span style="font-size: 30px"><i class="fa fa-download"></i></span>
+      	</div>
+	      <div id="ktkimpmahasiswa">
+	      	<div class="tengah bts-ats2">Yakin Melakukan Import data?</div>
+	      	<div class="tengah bts-ats"><button id="impmahasiswa" class="btn bghijau txtputih tengah" data-id="<?php echo $contoh; ?>" ><i class="fa fa-download"></i> Import data</button></div>
+	      </div>
+       	<div id="demo4"></div>
+       	<div id="gagal4"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#importdata").click(function(event){
@@ -226,6 +254,30 @@
 					},
 		    		error: function (){ // jqXHR, textStatus, errorThrow <- awalnya ada di dalam kurung
 		    			document.getElementById("gagal3").innerHTML = "<i class='fa fa-warninng txtpink'></i> "+dtvail+++" data gagal";
+		    		}
+		    	})
+			}
+		});
+	});
+	$(document).ready(function(){
+		$("#impmahasiswa").click(function(event){
+			var jml = $(this).data('id');
+			var dtfinish =0;
+			var dtvail =0;
+			var loop = Math.ceil(jml/200);
+			$('#ktkimpmahasiswa').remove();
+			document.getElementById("demo4").innerHTML = "<div class='tengah'><i class='fa fa-refresh fa-spin'></i> <span id='hitung4'>0</span> dari "+jml+" berhasil di import ...</div>";
+			for (var i = 0; i <= loop; i++) {
+				// $('#demo').append(i+' dan '+i*100+loop+"<br/>");
+				document.getElementById("demo4").innerHTML = "<div class='tengah bts-ats2'><i class='fa fa-refresh fa-spin'></i> <span id='hitung4'>0</span> dari "+loop+" berhasil di import ...</div>";
+				$.ajax({
+					url : "<?php echo base_url('index.php/isi_db/impmahasiswa/'.$smsprod.'/'); ?>"+i*200,
+					type:'get',
+					success:function(data){
+						$('#hitung4').html(dtfinish++);
+					},
+		    		error: function (){ // jqXHR, textStatus, errorThrow <- awalnya ada di dalam kurung
+		    			document.getElementById("gagal4").innerHTML = "<i class='fa fa-warninng txtpink'></i> "+dtvail+++" data gagal";
 		    		}
 		    	})
 			}
