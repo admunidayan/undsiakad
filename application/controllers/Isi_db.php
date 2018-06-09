@@ -272,7 +272,7 @@ class Isi_db extends CI_Controller
         $pass = $this->ion_auth->user()->row()->passfeeder;
         $token = $proxy->getToken($username, $pass);
     // setting nama table
-        $limit =200;
+        $limit =500;
         // 
         $table ='mahasiswa_pt';
         $order = "";
@@ -289,7 +289,7 @@ class Isi_db extends CI_Controller
             foreach ($result['result'] as $hasil) {
                 $tes = $this->Isi_m->detail_data_order('mahasiswa','id_pd',$hasil['id_pd']);
                 $kodesms = $this->Isi_m->cekprodi($sms)->kode_prodi;
-                // echo "<pre>";print_r($tes->id);echo "</pre>";exit();
+                // echo "<pre>";print_r($kodesms);echo "</pre>";exit();
                 if ($tes == FALSE) {
                     $check = $proxy->getRecord($token,"mahasiswa","id_pd='{$hasil['id_pd']}'");
                     $datam = $check['result'];
@@ -441,55 +441,145 @@ class Isi_db extends CI_Controller
         $order = '';
         $filter = '';
         $result = $proxy->getRecordset($token,$table,$filter,$order,$limit,$offest);
+        // echo "<pre>";print_r($result);echo "</pre>";exit();
     // default perhitungan jumlah
         $error_count = 0;
         $error = array();
         $sukses = 0;
     // perulangan
         if (!empty($result['result'])) {
-            foreach ($result['result'] as $data) { 
-                $check = $this->Isi_m->cekmhspt($data['id_reg_pd']);
-                // echo "<pre>";print_r($check);echo "</pre>";
-                if ($check==true) {
-                    $error_count++;
-                    $error[] = $data['nm_pd']." Sudah Ada";
-                }else{
-                    $sukses++;
-                    $kodesms = $this->Isi_m->cekprodi($data['id_sms'])->kode_prodi;
+            foreach ($result['result'] as $hasil) {
+                $tes = $this->Isi_m->detail_data_order('mahasiswa','id_pd',$hasil['id_pd']);
+                $kodesms = $this->Isi_m->cekprodi($hasil['id_sms'])->kode_prodi;
+                // echo "<pre>";print_r($kodesms);echo "</pre>";exit();
+                if ($tes == FALSE) {
+                    $check = $proxy->getRecord($token,"mahasiswa","id_pd='{$hasil['id_pd']}'");
+                    $datam = $check['result'];
+                    // echo "<pre>";print_r($check);echo "</pre>";exit();
+                    $datamhss = array(
+                        'id_pd'      => $hasil['id_pd'],
+                        'nm_pd'      => $datam['nm_pd'],
+                        'nim'      => $hasil['nipd'],
+                        'jk'      => $datam['jk'],
+                        'jln' => $datam['jln'],
+                        'rt' => $datam['rt'],
+                        'rw'      => $datam['rw'],
+                        'nm_dsn'      => $datam['nm_dsn'],
+                        'ds_kel'      => $datam['ds_kel'],
+                        'kode_pos' => $datam['kode_pos'],
+                        'nisn' => $datam['nisn'],
+                        'nik' => $datam['nik'],
+                        'tmpt_lahir' => $datam['tmpt_lahir'],
+                        'tgl_lahir' => $datam['tgl_lahir'],
+                        'nm_ayah' => $datam['nm_ayah'],
+                        'tgl_lahir_ayah' => $datam['tgl_lahir_ayah'],
+                        'nik_ayah' => $datam['nik_ayah'],
+                        'id_jenjang_pendidikan_ayah' => $datam['id_jenjang_pendidikan_ayah'],
+                        'id_pekerjaan_ayah' => $datam['id_pekerjaan_ayah'],
+                        'id_penghasilan_ayah' => $datam['id_penghasilan_ayah'],
+                        'id_kebutuhan_khusus_ayah' => $datam['id_kebutuhan_khusus_ayah'],
+                        'nm_ibu_kandung' => $datam['nm_ibu_kandung'],
+                        'tgl_lahir_ibu' => $datam['tgl_lahir_ibu'],
+                        'nik_ibu' => $datam['nik_ibu'],
+                        'id_jenjang_pendidikan_ibu' => $datam['id_jenjang_pendidikan_ibu'],
+                        'id_pekerjaan_ibu' => $datam['id_pekerjaan_ibu'],
+                        'id_penghasilan_ibu' => $datam['id_penghasilan_ibu'],
+                        'id_kebutuhan_khusus_ibu' => $datam['id_kebutuhan_khusus_ibu'],
+                        'nm_wali' => $datam['nm_wali'],
+                        'tgl_lahir_wali' => $datam['tgl_lahir_wali'],
+                        'id_jenjang_pendidikan_wali' => $datam['id_jenjang_pendidikan_wali'],
+                        'id_pekerjaan_wali' => $datam['id_pekerjaan_wali'],
+                        'id_penghasilan_wali' => $datam['id_penghasilan_wali'],
+                        'id_kk' => $datam['id_kk'],
+                        'no_tel_rmh' => $datam['no_tel_rmh'],
+                        'no_hp' => $datam['no_hp'],
+                        'email' => $datam['email'],
+                        'a_terima_kps' => $datam['a_terima_kps'],
+                        'no_kps' => $datam['no_kps'],
+                        'npwp' => $datam['npwp'],
+                        'id_wil' => $datam['id_wil'],
+                        'id_jns_tinggal' => $datam['id_jns_tinggal'],
+                        'id_agama' => $datam['id_agama'],
+                        'id_alat_transport' => $datam['id_alat_transport'],
+                        'kewarganegaraan' => $datam['kewarganegaraan'],
+                    );
+                    // echo "<pre>";print_r($datamhs);echo "</pre>";exit();
+                    $this->Isi_m->insert('mahasiswa',$datamhss);
+                    // 
                     $datamhs = array(
-                        'id_pd'      => $data['id_pd'],
-                        'id_reg_pd'      => $data['id_reg_pd'],
+                        'id_pd'      => $hasil['id_pd'],
+                        'id_pd_siakad'      => $this->Isi_m->detail_data_order('mahasiswa','id_pd',$hasil['id_pd'])->id,
+                        'id_reg_pd'      => $hasil['id_reg_pd'],
                         'kode_sms' =>$kodesms,
-                        'id_sp'      => $data['id_sp'],
-                        'id_sms' => $data['id_sms'],
-                        'nipd' => trim($data['nipd']),
-                        'tgl_masuk_sp'      => $data['tgl_masuk_sp'],
-                        'tgl_keluar'      => $data['tgl_keluar'],
-                        'ket'      => $data['ket'],
-                        'skhun' => $data['skhun'],
-                        'no_peserta_ujian' => $data['no_peserta_ujian'],
-                        'no_seri_ijazah' => $data['no_seri_ijazah'],
-                        'a_pernah_paud' => $data['a_pernah_paud'],
-                        'a_pernah_tk' => $data['a_pernah_tk'],
-                        'tgl_create' => $data['tgl_create'],
-                        'mulai_smt' => $data['mulai_smt'],
-                        'sks_diakui' => $data['sks_diakui'],
-                        'jalur_skripsi' => $data['jalur_skripsi'],
-                        'judul_skripsi' => $data['judul_skripsi'],
-                        'bln_awal_bimbingan' => $data['bln_awal_bimbingan'],
-                        'bln_akhir_bimbingan' => $data['bln_akhir_bimbingan'],
-                        'sk_yudisium' => $data['sk_yudisium'],
-                        'tgl_sk_yudisium' => $data['tgl_sk_yudisium'],
-                        'ipk' => $data['ipk'],
-                        'sert_prof' => $data['sert_prof'],
-                        'a_pindah_mhs_asing' => $data['a_pindah_mhs_asing'],
-                        'id_pt_asal' => $data['id_pt_asal'],
-                        'id_prodi_asal' => $data['id_prodi_asal'],
-                        'id_jns_daftar' => $data['id_jns_daftar'],
-                        'id_jns_keluar' => $data['id_jns_keluar'],
-                        'id_jalur_masuk' => $data['id_jalur_masuk'],
-                        'id_pembiayaan' => $data['id_pembiayaan'],
-                        );
+                        'id_sp'      => $hasil['id_sp'],
+                        'id_sms' => $hasil['id_sms'],
+                        'nipd' => trim($hasil['nipd']),
+                        'tgl_masuk_sp'      => $hasil['tgl_masuk_sp'],
+                        'tgl_keluar'      => $hasil['tgl_keluar'],
+                        'ket'      => $hasil['ket'],
+                        'skhun' => $hasil['skhun'],
+                        'no_peserta_ujian' => $hasil['no_peserta_ujian'],
+                        'no_seri_ijazah' => $hasil['no_seri_ijazah'],
+                        'a_pernah_paud' => $hasil['a_pernah_paud'],
+                        'a_pernah_tk' => $hasil['a_pernah_tk'],
+                        'tgl_create' => $hasil['tgl_create'],
+                        'mulai_smt' => $hasil['mulai_smt'],
+                        'sks_diakui' => $hasil['sks_diakui'],
+                        'jalur_skripsi' => $hasil['jalur_skripsi'],
+                        'judul_skripsi' => $hasil['judul_skripsi'],
+                        'bln_awal_bimbingan' => $hasil['bln_awal_bimbingan'],
+                        'bln_akhir_bimbingan' => $hasil['bln_akhir_bimbingan'],
+                        'sk_yudisium' => $hasil['sk_yudisium'],
+                        'tgl_sk_yudisium' => $hasil['tgl_sk_yudisium'],
+                        'ipk' => $hasil['ipk'],
+                        'sert_prof' => $hasil['sert_prof'],
+                        'a_pindah_mhs_asing' => $hasil['a_pindah_mhs_asing'],
+                        'id_pt_asal' => $hasil['id_pt_asal'],
+                        'id_prodi_asal' => $hasil['id_prodi_asal'],
+                        'id_jns_daftar' => $hasil['id_jns_daftar'],
+                        'id_jns_keluar' => $hasil['id_jns_keluar'],
+                        'id_jalur_masuk' => $hasil['id_jalur_masuk'],
+                        'id_pembiayaan' => $hasil['id_pembiayaan'],
+                    );
+                    // echo "<pre>";print_r($datamhs);echo "</pre>";exit();
+                    $this->Isi_m->insert('mahasiswa_pt',$datamhs);
+                }
+                else{
+                    $datamhs = array(
+                        'id_pd'      => $hasil['id_pd'],
+                        'id_pd_siakad'      => $tes->id,
+                        'id_reg_pd'      => $hasil['id_reg_pd'],
+                        'kode_sms' =>$kodesms,
+                        'id_sp'      => $hasil['id_sp'],
+                        'id_sms' => $hasil['id_sms'],
+                        'nipd' => trim($hasil['nipd']),
+                        'tgl_masuk_sp'      => $hasil['tgl_masuk_sp'],
+                        'tgl_keluar'      => $hasil['tgl_keluar'],
+                        'ket'      => $hasil['ket'],
+                        'skhun' => $hasil['skhun'],
+                        'no_peserta_ujian' => $hasil['no_peserta_ujian'],
+                        'no_seri_ijazah' => $hasil['no_seri_ijazah'],
+                        'a_pernah_paud' => $hasil['a_pernah_paud'],
+                        'a_pernah_tk' => $hasil['a_pernah_tk'],
+                        'tgl_create' => $hasil['tgl_create'],
+                        'mulai_smt' => $hasil['mulai_smt'],
+                        'sks_diakui' => $hasil['sks_diakui'],
+                        'jalur_skripsi' => $hasil['jalur_skripsi'],
+                        'judul_skripsi' => $hasil['judul_skripsi'],
+                        'bln_awal_bimbingan' => $hasil['bln_awal_bimbingan'],
+                        'bln_akhir_bimbingan' => $hasil['bln_akhir_bimbingan'],
+                        'sk_yudisium' => $hasil['sk_yudisium'],
+                        'tgl_sk_yudisium' => $hasil['tgl_sk_yudisium'],
+                        'ipk' => $hasil['ipk'],
+                        'sert_prof' => $hasil['sert_prof'],
+                        'a_pindah_mhs_asing' => $hasil['a_pindah_mhs_asing'],
+                        'id_pt_asal' => $hasil['id_pt_asal'],
+                        'id_prodi_asal' => $hasil['id_prodi_asal'],
+                        'id_jns_daftar' => $hasil['id_jns_daftar'],
+                        'id_jns_keluar' => $hasil['id_jns_keluar'],
+                        'id_jalur_masuk' => $hasil['id_jalur_masuk'],
+                        'id_pembiayaan' => $hasil['id_pembiayaan'],
+                    );
                     // echo "<pre>";print_r($datamhs);echo "</pre>";exit();
                     $this->Isi_m->insert('mahasiswa_pt',$datamhs);
                 }

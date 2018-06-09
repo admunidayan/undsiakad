@@ -264,14 +264,14 @@
 			var jml = $(this).data('id');
 			var dtfinish =0;
 			var dtvail =0;
-			var loop = Math.ceil(jml/200);
+			var loop = Math.ceil(jml/500);
 			$('#ktkimpmahasiswa').remove();
 			document.getElementById("demo4").innerHTML = "<div class='tengah'><i class='fa fa-refresh fa-spin'></i> <span id='hitung4'>0</span> dari "+jml+" berhasil di import ...</div>";
 			for (var i = 0; i <= loop; i++) {
 				// $('#demo').append(i+' dan '+i*100+loop+"<br/>");
 				document.getElementById("demo4").innerHTML = "<div class='tengah bts-ats2'><i class='fa fa-refresh fa-spin'></i> <span id='hitung4'>0</span> dari "+loop+" berhasil di import ...</div>";
 				$.ajax({
-					url : "<?php echo base_url('index.php/isi_db/impmahasiswa/'.$smsprod.'/'); ?>"+i*200,
+					url : "<?php echo base_url('index.php/isi_db/impmahasiswa/'.$smsprod.'/'); ?>"+i*500,
 					type:'get',
 					success:function(data){
 						$('#hitung4').html(dtfinish++);

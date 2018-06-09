@@ -39,7 +39,7 @@ class Mahasiswa_m extends CI_Model {
 	}
 	public function detail_mahasiswa($id_mhs){
 		$this->db->select('mahasiswa.*,mahasiswa_pt.*,sms.nm_lemb,sms.kode_prodi,sms.id_jenj_didik,sms.id_sms,mahasiswa_pt.id AS idmhs');
-		$this->db->join('mahasiswa', 'mahasiswa.id_mhs_pt = mahasiswa_pt.id');
+		$this->db->join('mahasiswa', 'mahasiswa.id = mahasiswa_pt.id_pd_siakad');
 		$this->db->join('sms', 'sms.kode_prodi = mahasiswa_pt.kode_sms');
 		$this->db->where('mahasiswa_pt.nipd', $id_mhs);
 		$query = $this->db->get('mahasiswa_pt');
@@ -216,13 +216,13 @@ class Mahasiswa_m extends CI_Model {
 	}
 	public function searcing_data2($sampai,$dari,$id,$string,$angkatan){
 		$this->db->select('mahasiswa.id_pd,mahasiswa.nm_pd,mahasiswa.id,mahasiswa.tgl_lahir,mahasiswa.tmpt_lahir,mahasiswa_pt.*,mahasiswa.id_pd AS idpd');
-		$this->db->join('mahasiswa', 'mahasiswa.id_mhs_pt = mahasiswa_pt.id');
+		$this->db->join('mahasiswa', 'mahasiswa.id = mahasiswa_pt.id_pd_siakad');
 		if (!empty($string)) {
 			$this->db->like('nipd',$string);
 			$this->db->or_like('nm_pd',$string);
 		}
 		if (!empty($angkatan)) {
-			$this->db->where('mulai_smt',$angkatan);
+			$this->db->where('mahasiswa_pt.mulai_smt',$angkatan);
 		}
 		$this->db->where('kode_sms',$id);
 		$this->db->order_by('mulai_smt','desc');
@@ -264,7 +264,7 @@ class Mahasiswa_m extends CI_Model {
 	}
 	public function detail_mahasiswa_npm($npm){
 		$this->db->where('id_pd',$npm);
-		$this->db->join('mahasiswa_pt', 'mahasiswa_pt.id_pd = mahasiswa.id_pd');
+		$this->db->join('mahasiswa_pt', 'mahasiswa_pt.id_pd_siakad = mahasiswa.id');
 		$query = $this->db->get('mahasiswa');
 		return $query;
 	}

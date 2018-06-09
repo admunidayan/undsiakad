@@ -51,7 +51,7 @@ class Mahasiswa extends CI_Controller {
                 $data['page'] = 'prodi/data-mhs-by-prodi-v';
                 $data['nav'] = 'nav/nav-admin';
                 $data['dtadm'] = $this->ion_auth->user()->row();
-                $jumlah = $this->Prodi_m->count_mhs_prod($idpd);
+                $jumlah = $this->Prodi_m->count_mhs_prod($idpd,@$post['string'],@$post['angkatan']);
                 $config['base_url'] = base_url().'index.php/prodi/mahasiswa/mhsprodi/'.$idpd.'/';
                 $config['total_rows'] = $jumlah;
                 $config['per_page'] = '20';

@@ -63,9 +63,18 @@ class Prodi_m extends CI_Model
 		$rs = $this->db->count_all_results();
 		return $rs;
 	}
-	public function count_mhs_prod($id_prodi){
+	public function count_mhs_prod($id_prodi,$string,$angkatan){
+		$this->db->select('mahasiswa.id_pd,mahasiswa.nm_pd,mahasiswa.id,mahasiswa.tgl_lahir,mahasiswa.tmpt_lahir,mahasiswa_pt.*,mahasiswa.id_pd AS idpd');
+		$this->db->join('mahasiswa', 'mahasiswa.id = mahasiswa_pt.id_pd_siakad');
 		if ($id_prodi>0) {
 			$this->db->where('kode_sms', $id_prodi);
+		}
+		if (!empty($string)) {
+			$this->db->like('nipd',$string);
+			$this->db->or_like('nm_pd',$string);
+		}
+		if (!empty($angkatan)) {
+			$this->db->where('mulai_smt',$angkatan);
 		}
 		$this->db->from('mahasiswa_pt');
 		$rs = $this->db->count_all_results();
