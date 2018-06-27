@@ -178,8 +178,8 @@ class Mahasiswa extends CI_Controller {
                 // echo "<pre>";print_r($id_reg);echo "<pre/>";exit();
                 $data['khsmhs'] = $this->Mahasiswa_m->get_khs_mhs2($detail->idmhs);
                 // echo "<pre>";print_r($data['khsmhs']);echo "<pre/>";exit();
-                $data['mkblumada'] = $this->Mahasiswa_m->get_matkul_not_in_khs(
-                $detail->id_mhs_pt,$detail->id_sms) ;
+                // $data['mkblumada'] = $this->Mahasiswa_m->get_matkul_not_in_khs(
+                // $detail->id_mhs_pt,$detail->id_sms) ;
                 
                 $this->load->view('admin/dashboard-v', $data);
             }

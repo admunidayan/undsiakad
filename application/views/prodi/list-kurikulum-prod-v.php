@@ -81,9 +81,8 @@
       <div class="prfbox">
         <form method="post" action="<?php echo base_url('index.php/prodi/kurikulum/proses_add_kurikulum') ?>">
           <div class="form-group">
-            <input type="hidden" name="id_prodi" value="<?php echo $dtamhsprod->id_prodi ?>">
-            <input type="hidden" name="kode_jurusan" value="<?php echo $dtamhsprod->kode_prodi ?>">
-            <input type="hidden" name="id_jenjang_pend" value="<?php echo $dtamhsprod->id_jenjang_pend ?>">
+            <!-- <input type="hidden" name="id_prodi" value="<?php echo $dtamhsprod->id ?>"> -->
+            <!-- <input type="hidden" name="id_jenjang_pend" value="<?php echo $dtamhsprod->id_jenjang_pend ?>"> -->
             <label for="nama_kur">Nama Kurikulum</label>
             <input type="text" name="nama_kur" class="form-control input-lg" id="nama_kur" placeholder="Nama Kurikulum">
           </div>

@@ -238,7 +238,7 @@ class Kelas_m extends CI_Model
 		if (!empty($angkatan)) {
 			$this->db->where('mahasiswa_pt.mulai_smt', $angkatan);
 		}
-		$this->db->join('mahasiswa', 'mahasiswa.id_mhs_pt = mahasiswa_pt.id');
+		$this->db->join('mahasiswa', 'mahasiswa.id = mahasiswa_pt.id_pd_siakad');
 		$this->db->where('kode_sms', $sms);
 		$this->db->order_by('mahasiswa_pt.nipd','asc');
 		$query = $this->db->get('mahasiswa_pt',$limit,$start);
