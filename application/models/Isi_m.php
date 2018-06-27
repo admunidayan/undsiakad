@@ -129,6 +129,11 @@ class Isi_m extends CI_Model {
 		$query = $this->db->get('wilayah');
 		return $query->row();
 	}
+	public function getsingledata($table,$field,$id){
+		$this->db->where($field,$id);
+		$query = $this->db->get($table);
+		return $query->row();
+	}
 	public function get_data_tabel($tabel){
 		$query = $this->db->get($tabel);
 		return $query->result();

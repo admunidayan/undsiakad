@@ -137,23 +137,23 @@ class Mahasiswa_m extends CI_Model {
 		$query = $this->db->get('nilai');
 		return $query->result();
 	}
-	public function get_matkul_not_in_khs($id_mhs, $id_fakultas, $id_prodi){
+	public function get_matkul_not_in_khs($id_mhs, $id_prodi){
 
-		$this->db->select('id_matakuliah');
-		$this->db->from('khs');
-		$this->db->where_in('id_mhs', $id_mhs);
+		$this->db->select('kode_mk');
+		$this->db->from('nilai');
+		$this->db->where_in('id_mhs_pt', $id_mhs);
 		$query = $this->db->get();
 		$matkul = $query->result();
 
 		$this->db->select('*');
-		$this->db->from('atur_matkul');
-		$this->db->join('matakuliah', 'matakuliah.id_matakuliah = atur_matkul.id_matakuliah');
-		$this->db->where('atur_matkul.id_fakultas', $id_fakultas);
-		$this->db->where('atur_matkul.id_prodi', $id_prodi);
+		$this->db->from('mata_kuliah_kurikulum');
+		$this->db->join('kurikulum', 'kurikulum.id = mata_kuliah_kurikulum.id_kurikulum_siakad');
+		// $this->db->where('atur_matkul.id_fakultas', $id_fakultas);
+		$this->db->where('mata_kuliah_kurikulum.id_sms', $id_prodi);
 		foreach ($matkul as $data) {
-			$this->db->where_not_in('atur_matkul.id_matakuliah', $data->id_matakuliah);
+			$this->db->where_not_in('mata_kuliah_kurikulum.id_mk_siakad', $data->kode_mk);
 		}
-		$this->db->order_by('atur_matkul.id_semester', 'asc');
+		$this->db->order_by('mata_kuliah_kurikulum.smt', 'asc');
 		$query = $this->db->get();
 
 		return $query->result();
@@ -263,21 +263,21 @@ class Mahasiswa_m extends CI_Model {
 		return $query->row();
 	}
 	public function detail_mahasiswa_npm($npm){
-		$this->db->where('id_pd',$npm);
-		$this->db->join('mahasiswa_pt', 'mahasiswa_pt.id_pd_siakad = mahasiswa.id');
-		$query = $this->db->get('mahasiswa');
+		$this->db->where('nipd',$npm);
+		$this->db->join('mahasiswa', 'mahasiswa.id = mahasiswa_pt.id_pd_siakad');
+		$query = $this->db->get('mahasiswa_pt');
 		return $query;
 	}
 	public function get_nilai_trans_mhs($npm){
 		$this->db->where('nipd',$npm);
-		$this->db->order_by('id_nilai_transfer','desc');
+		// $this->db->order_by('id_nilai_transfer','desc');
 		$query = $this->db->get('nilai_transfer');
 		return $query->result();
 	}
 	public function get_mkb($id){
-		$this->db->select('nama_matakuliah');
-		$this->db->where('id_mk',$id);
-		$query = $this->db->get('matakuliah');
+		// $this->db->select('nm_mk,id_mk_siakad');
+		$this->db->where('mata_kuliah.id',$id);
+		$query = $this->db->get('mata_kuliah');
 		return $query->row();
 	}
 	// search

@@ -53,7 +53,7 @@
 								<td class="tengah fkpading"><?php echo $data->nilai_huruf_asal;?></td>
 								<td class="tengah fkpading"><?php echo $data->sks_diakui;?></td>
 								<td class="fkpading">
-									<?php echo $this->Mahasiswa_m->get_mkb($data->id_mk)->nama_matakuliah; ?>
+									<?php echo @$this->Mahasiswa_m->get_mkb($data->id_mk_siakad)->nm_mk; ?>
 								</td>
 								<td class="tengah fkpading"><?php echo $data->nilai_huruf_diakui;?></td>
 								<td class="tengah fkpading"><?php echo $data->nilai_angka_diakui;?></td>
@@ -64,8 +64,8 @@
 										<label class="label label-warning">not exported</label>
 									<?php endif ?>
 								</td>
-								<td class="tengah fkpading"><a href="<?php echo base_url('index.php/prodi/mahasiswa/edit_koversi_nilai/'.$getmhs->npm.'/'.$data->id_nilai_transfer); ?>" class="btn label label-primary"><i class="fa fa-pencil"></i></a></td>
-								<td class="tengah fkpading"><a href="<?php echo base_url('index.php/prodi/mahasiswa/delete_nilai_transfer/'.$getmhs->npm.'/'.$data->id_nilai_transfer); ?>" onclick="javascript: return confirm('Yakin menghapus nilai ini ?')" class="btn label label-danger"><i class="fa fa-trash"></i></a></td>
+								<td class="tengah fkpading"><a href="<?php echo base_url('index.php/prodi/mahasiswa/edit_koversi_nilai/'.$getmhs->nipd.'/'.$data->id); ?>" class="btn label label-primary"><i class="fa fa-pencil"></i></a></td>
+								<td class="tengah fkpading"><a href="<?php echo base_url('index.php/prodi/mahasiswa/delete_nilai_transfer/'.$getmhs->nipd.'/'.$data->id); ?>" onclick="javascript: return confirm('Yakin menghapus nilai ini ?')" class="btn label label-danger"><i class="fa fa-trash"></i></a></td>
 							</tr>
 							<?php $no++ ?>
 						<?php endforeach ?>

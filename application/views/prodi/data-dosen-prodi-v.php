@@ -8,7 +8,7 @@
 						<div class="dashsubttl"><i class="fa fa-graduation-cap"></i></div>
 					</div>
 					<div class="media-body">
-						<h4 class="media-heading">Daftar Dosen <?php echo $getprod->nama_prodi; ?></h4>
+						<h4 class="media-heading">Daftar Dosen <?php echo $getprod->nm_lemb; ?></h4>
 						<div class="txtabu">Daftar dosen prodi Universitas Dayanu Ikhsanuddin Baubau</div>
 					</div>
 					<div class="media-right media-middle">
@@ -46,11 +46,11 @@
 						<tr>
 							<th class="tengah fkpading" rowspan="2">NO</th>
 							<th class="tengah fkpading" rowspan="2">NIK</th>
-							<th class="tengah fkpading" rowspan="2">DOSEN</th>
-							<th class="tengah fkpading" rowspan="2">MATAKULIAH</th>
+							<th class="tengah fkpading" rowspan="2">NAMA DOSEN</th>
 							<th class="tengah fkpading" rowspan="2">TGL LAHIR</th>
 							<th class="tengah fkpading" rowspan="2">T.A</th>
 							<th class="tengah fkpading" colspan="2">TUGAS</th>
+							<th class="tengah fkpading" rowspan="2">EXPORT</th>
 						</tr>
 						<tr>
 							<th class="tengah fkpading">NO SURAT</th>
@@ -65,7 +65,6 @@
 									<td class="tengah fkpading"><?php echo $no; ?></td>
 									<td class="fkpading"><?php echo $data->nik; ?></td>
 									<td class="fkpading"><?php echo $data->nm_sdm; ?></td>
-									<td class="fkpading"><?php echo $data->nm_mk; ?></td>
 									<td class="tengah fkpading"><?php echo $data->tgl_lahir; ?></td>
 									<td class="tengah fkpading"><?php echo $data->id_thn_ajaran; ?></td>
 									<td class="tengah fkpading">
@@ -76,6 +75,13 @@
 										<?php endif ?>
 									</td>
 									<td class="tengah fkpading"><?php echo $data->tgl_srt_tgs; ?></td>
+									<td class="tengah fkpading">
+										<?php if (!empty($data->id_reg_ptk)): ?>
+											<label class="label label-success">exported</label>
+										<?php else: ?>
+											<label class="label label-warning">not exported</label>
+										<?php endif ?>
+									</td>
 								</tr>
 								<?php $no++; ?>
 							<?php endforeach ?>

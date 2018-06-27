@@ -66,9 +66,10 @@ class Kelas_m extends CI_Model
 		return $query->row();
 	}
 	public function mahasiwakelas($id){
-		$this->db->select('nilai.*,mahasiswa.nm_pd,mahasiswa.id_mhs_pt,nilai.id as idnilai');
-		$this->db->join('mahasiswa', 'mahasiswa.id_mhs_pt = nilai.id_mhs_pt');
-		$this->db->order_by('nipd','asc');
+		$this->db->select('nilai.*,mahasiswa_pt.id_pd_siakad,mahasiswa.nm_pd,mahasiswa.id_mhs_pt,nilai.id as idnilai');
+		$this->db->join('mahasiswa_pt', 'mahasiswa_pt.id = nilai.id_mhs_pt');
+		$this->db->join('mahasiswa', 'mahasiswa.id = mahasiswa_pt.id_pd_siakad');
+		$this->db->order_by('nilai.nipd','asc');
 		$this->db->where('id_kls_siakad', $id);
 		$query = $this->db->get('nilai');
 		return $query;

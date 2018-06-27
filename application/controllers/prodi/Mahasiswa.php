@@ -178,11 +178,8 @@ class Mahasiswa extends CI_Controller {
                 // echo "<pre>";print_r($id_reg);echo "<pre/>";exit();
                 $data['khsmhs'] = $this->Mahasiswa_m->get_khs_mhs2($detail->idmhs);
                 // echo "<pre>";print_r($data['khsmhs']);echo "<pre/>";exit();
-                // $data['mkblumada'] = $this->Mahasiswa_m->get_matkul_not_in_khs(
-                //   $id_mhs,
-                //   $this->Mahasiswa_m->detail_mahasiswa($id_mhs)->row('id_fakultas'),
-                //   $this->Mahasiswa_m->detail_mahasiswa($id_mhs)->row('id_prodi')
-                //   ) ;
+                $data['mkblumada'] = $this->Mahasiswa_m->get_matkul_not_in_khs(
+                $detail->id_mhs_pt,$detail->id_sms) ;
                 
                 $this->load->view('admin/dashboard-v', $data);
             }
@@ -203,13 +200,13 @@ class Mahasiswa extends CI_Controller {
              $this->session->set_flashdata('message', $pesan );
              redirect(base_url('index.php/admin/dashboard_c'));
             }else{
-                $data['title'] = ucwords(strtolower($this->Mahasiswa_m->detail_mahasiswa_npm($npm)->row('nama_mhs')));
+                $data['title'] = ucwords(strtolower($this->Mahasiswa_m->detail_mahasiswa_npm($npm)->row('nm_pd')));
                 $data['page'] = 'prodi/nilai-transfer-mahasiswa-v';
                 $data['nav'] = 'nav/nav-admin';
                 $data['dtadm'] = $this->ion_auth->user()->row();
                 $data['getmhs'] = $this->Mahasiswa_m->detail_mahasiswa_npm($npm)->row();
                 $data['nilai'] = $this->Mahasiswa_m->get_nilai_trans_mhs($npm);
-                //
+                
                 $this->load->view('admin/dashboard-v', $data);
             }
         }

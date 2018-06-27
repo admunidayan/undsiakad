@@ -136,7 +136,7 @@
 			</div>
 			<div id="hasil"></div>
 			<form id="tambahmk" action="#" method="post">
-				<input type="hidden" name="id_mhs" value="<?php echo $getmhs->id_mhs; ?>">
+				<input type="hidden" name="id_mhs" value="<?php echo $getmhs->id; ?>">
 				<div class="modal-body">
 					<div id="listmk" style="max-height: 500px; overflow: scroll;">
 						<div class="prfbox">

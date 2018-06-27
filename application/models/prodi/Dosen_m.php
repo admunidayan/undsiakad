@@ -24,15 +24,16 @@ class Dosen_m extends CI_Model {
 			$this->db->where('id_thn_ajaran',$tahun);
 		}
 		// $this->db->join('atur_dosen', 'atur_dosen.id_dosen = dosen_pt.id_dosen');
-		$this->db->where('kode_jurusan', $id);
+		$this->db->where('id_sms', $id);
 		return $this->db->get('dosen_pt')->num_rows();
 	}
 	public function searcing_dosen($sampai,$dari,$id,$dosen,$tahun){
-		$this->db->select('dosen_pt.*,atur_dosen.nm_mk,atur_dosen.id_tahun_ajaran');
-		$this->db->join('atur_dosen', 'atur_dosen.id_dosen = dosen_pt.id_dosen');
+		$this->db->select('dosen_pt.*,dosen.nik,dosen.nm_sdm,dosen.tgl_lahir');
+		$this->db->join('dosen', 'dosen.id = dosen_pt.id_dosen_siakad');
 		if (!empty($dosen)){$this->db->like('nm_sdm',$dosen);}
 		if (!empty($tahun)){$this->db->where('id_thn_ajaran',$tahun);}
-		$this->db->where('kode_jurusan', $id);
+		$this->db->where('id_sms', $id);
+		$this->db->order_by('id_thn_ajaran','desc');
 		$query = $this->db->get('dosen_pt',$sampai,$dari);
 		return $query->result();
 	}
@@ -41,5 +42,10 @@ class Dosen_m extends CI_Model {
 		// $this->db->where('kode_jurusan', $id);
 		$query = $this->db->get('dosen');
 		return $query->result();
+	}
+	public function datasingle($table,$field,$id){
+		$this->db->where($field, $id);
+		$query = $this->db->get($table);
+		return $query->row();
 	}
 }

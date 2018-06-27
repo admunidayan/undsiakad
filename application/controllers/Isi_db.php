@@ -1469,7 +1469,7 @@ class Isi_db extends CI_Controller
                 // echo "<pre>";print_r($check);echo "</pre>";
                     $datamhs = array(
                     'id_reg_ptk'      => $data['id_reg_ptk'],
-                    'no_srt_tgs '      => $data['no_srt_tgs '],
+                    'no_srt_tgs'      => $data['no_srt_tgs '],
                     'tgl_srt_tgs'      => $data['tgl_srt_tgs'],
                     'tmt_srt_tgs' => $data['tmt_srt_tgs'],
                     'tgl_ptk_keluar'      => $data['tgl_ptk_keluar'],
@@ -1721,8 +1721,10 @@ class Isi_db extends CI_Controller
                     $datamhs = array(
                         'id_ekuivalensi'      => trim($data['id_ekuivalensi']),
                         'id_reg_pd'      => trim($data['id_reg_pd']),
+                        'id_mhs_pt'      => trim($this->Isi_m->getsingledata('mahasiswa_pt','id_reg_pd',$data['id_reg_pd'])->id),
                         'nipd'      => trim($data['nipd']),
                         'id_mk'      => trim($data['id_mk']),
+                        'id_mk_siakad'      => trim($this->Isi_m->getsingledata('mata_kuliah','id_mk',$data['id_mk'])->id),
                         'kode_mk_asal' => trim($data['kode_mk_asal']),
                         'nm_mk_asal'      => trim($data['nm_mk_asal']),
                         'sks_asal'      => trim($data['sks_asal']),

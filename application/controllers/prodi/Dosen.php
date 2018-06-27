@@ -29,8 +29,9 @@ class Dosen extends CI_Controller {
                 $data['nav'] = 'nav/nav-admin';
                 $data['dtadm'] = $this->ion_auth->user()->row();
                 // pagging setting
-                $data['contoh'] =$this->Dosen_m->jumlah_dosen($id,@$post['dosen'],@$post['tahun']);
-                $jumlah = $this->Dosen_m->jumlah_dosen($id,@$post['dosen'],@$post['tahun']);
+                $idsms = $this->Dosen_m->datasingle('sms','kode_prodi',$id)->id_sms;
+                $data['contoh'] =$this->Dosen_m->jumlah_dosen($idsms,@$post['dosen'],@$post['tahun']);
+                $jumlah = $data['contoh'];
                 $config['base_url'] = base_url().'index.php/prodi/dosen/dosenprodi/'.$id;
                 $config['total_rows'] = $jumlah;
                 $config['per_page'] = '20';
@@ -56,10 +57,11 @@ class Dosen extends CI_Controller {
                 //inisialisasi config
                 $this->pagination->initialize($config);
                 // pengaturan searching
-                $prodi_id = $this->Dosen_m->id_prodi($id)->id_prodi;
+                // $prodi_id = $this->Dosen_m->id_prodi($id)->id_prodi;
                 $data['nomor'] = $offset;
-                $data['getprod'] = $this->Prodi_m->detail_prodi($prodi_id)->row();
-                $data['dtdosen'] = $this->Dosen_m->searcing_dosen($config['per_page'],$offset,$id,@$post['dosen'],@$post['tahun']);
+                $data['getprod'] = $this->Dosen_m->datasingle('sms','kode_prodi',$id);
+                // echo "<pre>";print_r($this->Prodi_m->detail_prodi($idsms)->row());echo "<pre>";exit();
+                $data['dtdosen'] = $this->Dosen_m->searcing_dosen($config['per_page'],$offset,$idsms,@$post['dosen'],@$post['tahun']);
                 $data['pagging'] = $this->pagination->create_links();
                 $this->load->view('admin/dashboard-v', $data);
             }
